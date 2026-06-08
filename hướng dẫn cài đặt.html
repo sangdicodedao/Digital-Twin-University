@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hướng dẫn cài đặt — Digital Twin University</title>
+<style>
+:root {
+  --bg:     #0f1117; --bg2: #1a1d27; --bg3: #242736; --card: #1e2235;
+  --border: rgba(255,255,255,0.08); --primary: #6366f1; --primary2: #818cf8;
+  --green:  #22d3a0; --red: #f87171; --amber: #fbbf24; --blue: #38bdf8;
+  --text:   #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.7;font-size:15px;}
+a{color:var(--blue);text-decoration:none;}a:hover{text-decoration:underline;}
+ 
+/* HEADER */
+.hero{background:linear-gradient(135deg,#1a1d27 0%,#1e2035 50%,#0f1117 100%);padding:60px 40px;text-align:center;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%);pointer-events:none;}
+.hero h1{font-size:2.5rem;font-weight:800;background:linear-gradient(135deg,var(--primary2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.hero p{font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto 24px;}
+.hero-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.htag{padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid;}
+.htag-indigo{background:rgba(99,102,241,0.15);color:var(--primary2);border-color:rgba(99,102,241,0.3);}
+.htag-green{background:rgba(34,211,160,0.1);color:var(--green);border-color:rgba(34,211,160,0.3);}
+.htag-amber{background:rgba(251,191,36,0.1);color:var(--amber);border-color:rgba(251,191,36,0.3);}
+ 
+/* LAYOUT */
+.container{max-width:900px;margin:0 auto;padding:40px 24px;}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:40px;}
+.toc h3{font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;}
+.toc-list{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;}
+.toc-list a{display:block;padding:6px 12px;border-radius:8px;font-size:13px;color:var(--text2);background:var(--bg3);transition:all 0.15s;}
+.toc-list a:hover{background:rgba(99,102,241,0.15);color:var(--primary2);text-decoration:none;}
+ 
+/* SECTIONS */
+.section{margin-bottom:48px;}
+h2{font-size:1.4rem;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.section-sub{font-size:13px;color:var(--text3);margin-bottom:20px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.card-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;}
+.card-body{padding:20px;}
+.os-icon{font-size:20px;}
+ 
+/* CODE BLOCKS */
+.code-block{background:#0a0c14;border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;margin-bottom:12px;font-family:'JetBrains Mono','Fira Code','Consolas',monospace;}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.06);}
+.code-lang{font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);}
+.copy-btn{background:rgba(99,102,241,0.2);border:1px solid rgba(99,102,241,0.3);color:var(--primary2);padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.copy-btn:hover{background:rgba(99,102,241,0.35);}
+.copy-btn.copied{background:rgba(34,211,160,0.2);border-color:rgba(34,211,160,0.3);color:var(--green);}
+pre{padding:16px;overflow-x:auto;font-size:13px;line-height:1.8;color:#e2e8f0;}
+.cm{color:#64748b;} /* comment */
+.ck{color:#a78bfa;} /* keyword */
+.cs{color:#34d399;} /* string */
+.cn{color:#f59e0b;} /* number */
+.cc{color:#38bdf8;} /* command */
+ 
+/* STEPS */
+.step{display:flex;gap:16px;margin-bottom:20px;}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;margin-top:2px;}
+.step-content{flex:1;}
+.step-title{font-weight:600;margin-bottom:6px;}
+.step-desc{font-size:13px;color:var(--text2);margin-bottom:10px;}
+ 
+/* ALERT */
+.alert{border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13px;display:flex;gap:12px;align-items:flex-start;}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alert-content h4{font-weight:600;margin-bottom:4px;}
+.alert-content p{color:inherit;opacity:0.85;}
+.alert-green{background:rgba(34,211,160,0.1);border:1px solid rgba(34,211,160,0.25);color:var(--green);}
+.alert-amber{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);color:var(--amber);}
+.alert-red{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:var(--red);}
+.alert-blue{background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.25);color:var(--blue);}
+ 
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;color:var(--text3);font-size:11px;letter-spacing:0.06em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.04);}
+tr:last-child td{border-bottom:none;}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;}
+.tag-g{background:rgba(34,211,160,0.15);color:var(--green);}
+.tag-r{background:rgba(248,113,113,0.15);color:var(--red);}
+.tag-a{background:rgba(251,191,36,0.15);color:var(--amber);}
+ 
+/* FEATURE GRID */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.feat-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;}
+.feat-icon{font-size:24px;margin-bottom:8px;}
+.feat-title{font-size:13px;font-weight:600;margin-bottom:4px;}
+.feat-desc{font-size:12px;color:var(--text3);line-height:1.5;}
+ 
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:40px 0;}
+footer{text-align:center;padding:40px 24px;color:var(--text3);font-size:13px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+ 
+<!-- HERO -->
+<div class="hero">
+  <h1>🎓 Digital Twin University</h1>
+  <p>Hướng dẫn cài đặt và sử dụng đầy đủ — đọc một lần, chạy được ngay</p>
+  <div class="hero-tags">
+    <span class="htag htag-indigo">C++17 Backend</span>
+    <span class="htag htag-green">REST API</span>
+    <span class="htag htag-amber">Web Dashboard</span>
+    <span class="htag htag-indigo">Agent-Based Simulation</span>
+  </div>
+</div>
+ 
+<div class="container">
+ 
+  <!-- TOC -->
+  <div class="toc">
+    <h3>📋 Mục lục</h3>
+    <ul class="toc-list">
+      <li><a href="#overview">Tổng quan dự án</a></li>
+      <li><a href="#files">Cấu trúc file</a></li>
+      <li><a href="#linux">Cài đặt Linux/Ubuntu</a></li>
+      <li><a href="#macos">Cài đặt macOS</a></li>
+      <li><a href="#windows">Cài đặt Windows (WSL)</a></li>
+      <li><a href="#usage">Cách sử dụng</a></li>
+      <li><a href="#api">API Reference</a></li>
+      <li><a href="#troubleshoot">Xử lý lỗi</a></li>
+    </ul>
+  </div>
+ 
+  <!-- OVERVIEW -->
+  <div class="section" id="overview">
+    <h2>📌 Tổng quan dự án</h2>
+    <p class="section-sub">Kiến trúc, công nghệ sử dụng và tính năng</p>
+ 
+    <div class="feat-grid" style="margin-bottom:20px">
+      <div class="feat-card">
+        <div class="feat-icon">🖥️</div>
+        <div class="feat-title">C++17 Backend</div>
+        <div class="feat-desc">HTTP server thuần POSIX sockets, không cần thư viện ngoài. Compile 1 lệnh, chạy ngay.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🌐</div>
+        <div class="feat-title">Web Frontend</div>
+        <div class="feat-desc">HTML/CSS/JS đơn file, không cần Node.js hay npm. Mở bằng trình duyệt là xong.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-title">Agent-Based Simulation</div>
+        <div class="feat-desc">200–500 sinh viên agent, mỗi người có GPA, năng lượng, tiền, stress riêng.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">Real-time Dashboard</div>
+        <div class="feat-desc">Charts GPA trend, bảng xếp hạng, log sự kiện, thống kê học kỳ.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Sự kiện ngẫu nhiên</div>
+        <div class="feat-desc">Dịch bệnh, học bổng, mất điện... 14% xác suất mỗi ngày, 8 loại sự kiện.</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">✏️</div>
+        <div class="feat-title">Nhập thủ công</div>
+        <div class="feat-desc">Thêm sinh viên, giảng viên qua form web. Điều chỉnh học phí, chính sách.</div>
+      </div>
+    </div>
+ 
+    <div class="alert alert-blue">
+      <div class="alert-icon">ℹ️</div>
+      <div class="alert-content">
+        <h4>Cách hoạt động</h4>
+        <p>Server C++ chạy ở <code>localhost:8080</code>, cung cấp REST API. Khi mở browser vào <code>http://localhost:8080</code>, server trả về file HTML frontend. Frontend gọi API để hiển thị dữ liệu real-time.</p>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- FILES -->
+  <div class="section" id="files">
+    <h2>📁 Cấu trúc file</h2>
+    <p class="section-sub">2 file duy nhất cần thiết để chạy toàn bộ ứng dụng</p>
+ 
+    <div class="card">
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">project structure</span></div>
+<pre>dtu/
+├── <span style="color:var(--amber)">server.cpp</span>      ← Backend C++: engine mô phỏng + HTTP server
+├── <span style="color:var(--blue)">index.html</span>      ← Frontend: dashboard web (Chart.js, thuần HTML/JS)
+├── <span style="color:var(--green)">run.sh</span>          ← Script chạy tự động (Linux / macOS)
+└── dtu_server      ← Binary sau khi compile (tự sinh ra)</pre>
+        </div>
+ 
+        <table>
+          <thead><tr><th>File</th><th>Kích thước</th><th>Mô tả</th></tr></thead>
+          <tbody>
+            <tr><td><code>server.cpp</code></td><td>~1.300 dòng</td><td>Toàn bộ backend: University engine + HTTP server. Compile 1 file duy nhất.</td></tr>
+            <tr><td><code>index.html</code></td><td>~900 dòng</td><td>Toàn bộ frontend: layout, CSS, Charts.js, JS API calls. Không cần build.</td></tr>
+            <tr><td><code>run.sh</code></td><td>~150 dòng</td><td>Script tự động: kiểm tra môi trường, compile, chạy server, mở browser.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="divider"></div>
+ 
+  <!-- LINUX -->
+  <div class="section" id="linux">
+    <div class="card">
+      <div class="card-header"><span class="os-icon">🐧</span> Ubuntu / Debian / Linux</div>
+      <div class="card-body">
+ 
+        <div class="alert alert-green">
+          <div class="alert-icon">⚡</div>
+          <div class="alert-content">
+            <h4>Cách nhanh nhất — 1 lệnh</h4>
+            <p>Dùng script tự động. Script sẽ kiểm tra, cài compiler nếu thiếu, compile và mở browser.</p>
+          </div>
+        </div>
+ 
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">bash — Terminal</span>
+            <button class="copy-btn" onclick="copyCode(this,'chmod +x run.sh && ./run.sh')">Copy</button>
+          </div>
+<pre><span class="cm"># Bước duy nhất: chạy script tự động</span>
+<span class="cc">chmod +x run.sh && ./run.sh</span></pre>
+        </div>
+ 
+        <p style="font-size:13px;color:var(--text3);margin-bottom:20px">Hoặc nếu muốn làm từng bước thủ công:</p>
+ 
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Cài g++ (nếu chưa có)</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'sudo apt update && sudo apt install -y g++ curl')">Copy</button></div>
+<pre><span class="cc">sudo apt update && sudo apt install -y g++ curl</span>
+ 
+<span class="cm"># Kiểm tra cài thành công:</span>
+<span class="cc">g++ --version</span>   <span class="cm"># phải hiện: g++ (Ubuntu ...) 11.x.x ...</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Compile server.cpp</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'g++ -std=c++17 -O2 -pthread -o dtu_server server.cpp')">Copy</button></div>
+<pre><span class="cc">g++ -std=c++17 -O2 -pthread -o dtu_server server.cpp</span>
+ 
+<span class="cm"># Nếu không có lỗi → sinh ra file dtu_server (~180KB)</span>
+<span class="cc">ls -lh dtu_server</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Chạy server</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'./dtu_server')">Copy</button></div>
+<pre><span class="cc">./dtu_server</span>          <span class="cm"># mặc định port 8080</span>
+<span class="cm"># hoặc đổi port:</span>
+<span class="cc">./dtu_server 9090</span>     <span class="cm"># port 9090</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Mở ứng dụng trong trình duyệt</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'xdg-open http://localhost:8080')">Copy</button></div>
+<pre><span class="cc">xdg-open http://localhost:8080</span>
+<span class="cm"># Hoặc gõ thủ công vào Chrome/Firefox:</span>
+<span class="cm"># http://localhost:8080</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="alert alert-amber">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-content">
+            <h4>Dừng server khi xong</h4>
+            <p>Nhấn <code>Ctrl+C</code> trong terminal — hoặc chạy: <code>./run.sh stop</code></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- MACOS -->
+  <div class="section" id="macos">
+    <div class="card">
+      <div class="card-header"><span class="os-icon">🍎</span> macOS (Monterey / Ventura / Sonoma)</div>
+      <div class="card-body">
+ 
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Cài Xcode Command Line Tools (chỉ làm 1 lần)</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">bash — Terminal</span><button class="copy-btn" onclick="copyCode(this,'xcode-select --install')">Copy</button></div>
+<pre><span class="cc">xcode-select --install</span>
+<span class="cm"># Một cửa sổ hiện lên → nhấn "Install" → chờ ~5 phút</span>
+<span class="cm"># Sau khi xong, kiểm tra:</span>
+<span class="cc">g++ --version</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Compile và chạy</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'chmod +x run.sh && ./run.sh')">Copy</button></div>
+<pre><span class="cm"># Dùng script tự động:</span>
+<span class="cc">chmod +x run.sh && ./run.sh</span>
+ 
+<span class="cm"># Hoặc thủ công:</span>
+<span class="cc">g++ -std=c++17 -O2 -pthread -o dtu_server server.cpp</span>
+<span class="cc">./dtu_server</span>
+<span class="cc">open http://localhost:8080</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="alert alert-amber">
+          <div class="alert-icon">🔒</div>
+          <div class="alert-content">
+            <h4>macOS chặn binary "không rõ nguồn gốc"</h4>
+            <p>Nếu thấy cảnh báo <em>"dtu_server cannot be opened"</em>: vào <strong>System Settings → Privacy & Security</strong> → kéo xuống → bấm <strong>"Allow Anyway"</strong>. Hoặc chạy: <code>xattr -cr dtu_server</code></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- WINDOWS -->
+  <div class="section" id="windows">
+    <div class="card">
+      <div class="card-header"><span class="os-icon">🪟</span> Windows 10/11 — Dùng WSL (Windows Subsystem for Linux)</div>
+      <div class="card-body">
+ 
+        <div class="alert alert-red">
+          <div class="alert-icon">❌</div>
+          <div class="alert-content">
+            <h4>Tại sao không compile native trên Windows?</h4>
+            <p><code>server.cpp</code> dùng POSIX sockets (<code>sys/socket.h</code>, <code>unistd.h</code>) — là API chuẩn Linux/macOS. MinGW/MSVC trên Windows không có các header này. <strong>Giải pháp: dùng WSL</strong> — cho phép chạy Ubuntu ngay trong Windows, hiệu năng tốt, miễn phí.</p>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">Cài WSL2 + Ubuntu (chỉ làm 1 lần, cần restart PC)</div>
+            <div class="step-desc">Mở <strong>PowerShell</strong> hoặc <strong>Command Prompt</strong> với quyền <strong>Administrator</strong>:</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">PowerShell (Admin)</span><button class="copy-btn" onclick="copyCode(this,'wsl --install')">Copy</button></div>
+<pre><span class="cc">wsl --install</span>
+<span class="cm"># → tự cài WSL2 + Ubuntu 22.04</span>
+<span class="cm"># → Restart máy tính khi được yêu cầu</span></pre>
+            </div>
+            <div class="alert alert-blue" style="margin-top:10px">
+              <div class="alert-icon">💡</div>
+              <div class="alert-content"><p>Sau khi restart, Ubuntu tự mở và yêu cầu tạo username/password. Nhập tùy ý (username không cần trùng Windows).</p></div>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">Mở Ubuntu và cài g++</div>
+            <div class="step-desc">Tìm "Ubuntu" trong Start Menu, mở terminal Ubuntu. Sau đó:</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Ubuntu terminal (WSL)</span><button class="copy-btn" onclick="copyCode(this,'sudo apt update && sudo apt install -y g++ curl')">Copy</button></div>
+<pre><span class="cc">sudo apt update && sudo apt install -y g++ curl</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">Copy file dự án vào WSL và chạy</div>
+            <div class="step-desc">Giả sử bạn tải dự án vào thư mục <code>C:\Users\TenBan\Downloads\dtu</code>:</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Ubuntu terminal (WSL)</span><button class="copy-btn" onclick="copyCode(this,'cd /mnt/c/Users/TenBan/Downloads/dtu\nchmod +x run.sh && ./run.sh')">Copy</button></div>
+<pre><span class="cm"># Di chuyển đến thư mục dự án (đổi TenBan = tên user Windows)</span>
+<span class="cc">cd /mnt/c/Users/TenBan/Downloads/dtu</span>
+ 
+<span class="cm"># Chạy script tự động</span>
+<span class="cc">chmod +x run.sh && ./run.sh</span></pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">Mở trình duyệt trên Windows</div>
+            <div class="step-desc">Server chạy trong WSL nhưng Windows có thể truy cập bình thường:</div>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">Chrome / Edge / Firefox</span></div>
+<pre><span class="cm"># Gõ vào thanh địa chỉ trình duyệt Windows:</span>
+http://localhost:8080</pre>
+            </div>
+          </div>
+        </div>
+ 
+        <div class="alert alert-green">
+          <div class="alert-icon">✅</div>
+          <div class="alert-content">
+            <h4>Tip: Ghim Ubuntu vào Taskbar</h4>
+            <p>Sau khi cài WSL, tìm "Ubuntu" trong Start → chuột phải → "Pin to taskbar". Lần sau mở nhanh hơn.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="divider"></div>
+ 
+  <!-- USAGE -->
+  <div class="section" id="usage">
+    <h2>🎮 Cách sử dụng ứng dụng</h2>
+    <p class="section-sub">Sau khi server chạy và mở browser tại http://localhost:8080</p>
+ 
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr><th>Trang</th><th>Mô tả</th><th>Tính năng chính</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>📊 <strong>Dashboard</strong></td><td>Màn hình chính</td><td>GPA trend chart, live stats (sinh viên/stress/energy), log sự kiện, trạng thái tòa nhà</td></tr>
+          <tr><td>▶️ <strong>Điều khiển</strong></td><td>Chạy mô phỏng</td><td>Chạy 1 ngày / 1 kỳ / toàn bộ; kích hoạt dịch bệnh; cấp học bổng; cấu hình lại trường</td></tr>
+          <tr><td>👨‍🎓 <strong>Sinh viên</strong></td><td>Danh sách 200 agent</td><td>Tìm kiếm, lọc theo trạng thái, sắp xếp theo GPA/stress, phân trang</td></tr>
+          <tr><td>👨‍🏫 <strong>Giảng viên</strong></td><td>20 giảng viên</td><td>Xem mood, rating, tiến độ nghiên cứu, hệ số chuyển giao kiến thức</td></tr>
+          <tr><td>🏫 <strong>Cơ sở vật chất</strong></td><td>Tòa nhà campus</td><td>Cafeteria, thư viện, ký túc xá, phòng học — tỉ lệ lấp đầy real-time</td></tr>
+          <tr><td>⚡ <strong>Sự kiện</strong></td><td>Nhật ký sự kiện</td><td>Tất cả sự kiện đã xảy ra theo ngày, mức độ, phạm vi ảnh hưởng</td></tr>
+          <tr><td>📈 <strong>Thống kê</strong></td><td>Analytics</td><td>Biểu đồ GPA/Energy/Stress theo ngày, bảng tổng kết từng kỳ</td></tr>
+          <tr><td>🏆 <strong>Bảng xếp hạng</strong></td><td>Top 30 sinh viên</td><td>Xếp hạng GPA, huy chương vàng/bạc/đồng</td></tr>
+          <tr><td>✏️ <strong>Nhập thông tin</strong></td><td>Thêm người dùng</td><td>Form thêm sinh viên (tên, ngành, kỳ, GPA) và giảng viên (tên, môn, kinh nghiệm)</td></tr>
+          <tr><td>⚙️ <strong>Chính sách</strong></td><td>Admin controls</td><td>Điều chỉnh học phí, cấp học bổng hàng loạt, mở/đóng tòa nhà, kịch bản dịch bệnh</td></tr>
+        </tbody>
+      </table>
+    </div>
+ 
+    <div class="card" style="margin-top:20px">
+      <div class="card-header">💡 Workflow điển hình</div>
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">step by step</span></div>
+<pre><span class="cn">1.</span> Mở trang <span style="color:var(--blue)">Dashboard</span> → xem trạng thái khởi đầu (200 sv, kỳ 1, ngày 0)
+ 
+<span class="cn">2.</span> Sang trang <span style="color:var(--blue)">Điều khiển</span> → nhấn <span style="color:var(--green)">"▶ Chạy 1 ngày"</span> vài lần → quan sát GPA thay đổi
+ 
+<span class="cn">3.</span> Nhấn <span style="color:var(--green)">"⏩ Chạy 1 kỳ"</span> → chờ vài giây → Dashboard cập nhật, xem chart GPA trend
+ 
+<span class="cn">4.</span> Sang <span style="color:var(--blue)">Sinh viên</span> → tìm kiếm "Nguyen" → lọc "Sick" → xem ai đang bị bệnh
+ 
+<span class="cn">5.</span> Sang <span style="color:var(--blue)">Chính sách</span> → kích hoạt <span style="color:var(--red)">Dịch bệnh 40%</span> → quay Điều khiển → chạy thêm 1 kỳ → so sánh GPA
+ 
+<span class="cn">6.</span> Sang <span style="color:var(--blue)">Nhập thông tin</span> → thêm sinh viên mình: nhập tên, ngành, GPA 3.8
+ 
+<span class="cn">7.</span> Sang <span style="color:var(--blue)">Bảng xếp hạng</span> → xem mình có top 10 không 😄
+ 
+<span class="cn">8.</span> Sang <span style="color:var(--blue)">Thống kê</span> → xem biểu đồ GPA/Stress toàn kỳ, bảng tổng kết</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="divider"></div>
+ 
+  <!-- API -->
+  <div class="section" id="api">
+    <h2>📡 API Reference</h2>
+    <p class="section-sub">Test API bằng curl hoặc bất kỳ HTTP client nào</p>
+ 
+    <div class="card">
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">bash — curl examples</span><button class="copy-btn" onclick="copyCode(this, document.querySelector('#api-code').textContent)">Copy all</button></div>
+<pre id="api-code"><span class="cm"># ── GET endpoints ─────────────────────────────────────────</span>
+ 
+<span class="cm"># Trạng thái tổng quan</span>
+<span class="cc">curl http://localhost:8080/api/status</span>
+ 
+<span class="cm"># Danh sách sinh viên (phân trang: page 0, 50 sv/trang)</span>
+<span class="cc">curl "http://localhost:8080/api/students?page=0&size=50"</span>
+ 
+<span class="cm"># Giảng viên</span>
+<span class="cc">curl http://localhost:8080/api/lecturers</span>
+ 
+<span class="cm"># Tòa nhà</span>
+<span class="cc">curl http://localhost:8080/api/buildings</span>
+ 
+<span class="cm"># Sự kiện đã xảy ra</span>
+<span class="cc">curl http://localhost:8080/api/events</span>
+ 
+<span class="cm"># Analytics (GPA trend, thống kê kỳ)</span>
+<span class="cc">curl http://localhost:8080/api/analytics</span>
+ 
+<span class="cm"># Bảng xếp hạng top 20</span>
+<span class="cc">curl "http://localhost:8080/api/leaderboard?n=20"</span>
+ 
+<span class="cm"># Sinh viên bỏ học</span>
+<span class="cc">curl http://localhost:8080/api/dropouts</span>
+ 
+<span class="cm"># Activity log</span>
+<span class="cc">curl http://localhost:8080/api/log</span>
+ 
+<span class="cm"># ── POST commands ─────────────────────────────────────────</span>
+ 
+<span class="cm"># Chạy 1 ngày</span>
+<span class="cc">curl -X POST http://localhost:8080/api/command \
+     -H "Content-Type: application/json" \
+     -d '{"cmd":"run_day"}'</span>
+ 
+<span class="cm"># Chạy 1 học kỳ (90 ngày)</span>
+<span class="cc">curl -X POST http://localhost:8080/api/command \
+     -d '{"cmd":"run_semester"}'</span>
+ 
+<span class="cm"># Kích hoạt dịch bệnh (30% sinh viên bị ảnh hưởng)</span>
+<span class="cc">curl -X POST http://localhost:8080/api/command \
+     -d '{"cmd":"epidemic","rate":0.3}'</span>
+ 
+<span class="cm"># Cấp học bổng cho SV có GPA ≥ 3.2</span>
+<span class="cc">curl -X POST http://localhost:8080/api/command \
+     -d '{"cmd":"scholarship","minGpa":3.2}'</span>
+ 
+<span class="cm"># Đóng/mở căng-tin</span>
+<span class="cc">curl -X POST http://localhost:8080/api/command -d '{"cmd":"close_cafeteria"}'</span>
+<span class="cc">curl -X POST http://localhost:8080/api/command -d '{"cmd":"open_cafeteria"}'</span>
+ 
+<span class="cm"># Thêm sinh viên mới</span>
+<span class="cc">curl -X POST http://localhost:8080/api/add_student \
+     -H "Content-Type: application/json" \
+     -d '{"name":"Nguyen Van A","major":"Computer Science","semester":1,"gpa":3.8}'</span>
+ 
+<span class="cm"># Thêm giảng viên mới</span>
+<span class="cc">curl -X POST http://localhost:8080/api/add_lecturer \
+     -d '{"name":"TS. Tran Van B","subject":"AI","experience":10}'</span>
+ 
+<span class="cm"># Đổi cấu hình (RESET toàn bộ simulation)</span>
+<span class="cc">curl -X POST http://localhost:8080/api/config \
+     -d '{"numStudents":500,"numSemesters":8,"uniName":"My University"}'</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="divider"></div>
+ 
+  <!-- TROUBLESHOOT -->
+  <div class="section" id="troubleshoot">
+    <h2>🔧 Xử lý lỗi thường gặp</h2>
+    <p class="section-sub">Các vấn đề phổ biến và cách giải quyết</p>
+ 
+    <div class="card">
+      <div class="card-body">
+        <table>
+          <thead><tr><th>Lỗi</th><th>Nguyên nhân</th><th>Giải pháp</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code style="color:var(--red)">g++: not found</code></td>
+              <td>Chưa cài compiler</td>
+              <td><span class="tag tag-g">Linux</span> <code>sudo apt install g++</code><br><span class="tag tag-a">macOS</span> <code>xcode-select --install</code></td>
+            </tr>
+            <tr>
+              <td><code style="color:var(--red)">sys/socket.h: No such file</code></td>
+              <td>Đang compile trên Windows native (không dùng WSL)</td>
+              <td>Dùng WSL theo hướng dẫn phần Windows ở trên. Không hỗ trợ MinGW native.</td>
+            </tr>
+            <tr>
+              <td><code style="color:var(--red)">bind failed on port 8080</code></td>
+              <td>Port đang bị process khác dùng</td>
+              <td><code>lsof -i :8080</code> rồi <code>kill &lt;PID&gt;</code>. Hoặc đổi port: <code>./dtu_server 9090</code></td>
+            </tr>
+            <tr>
+              <td><code style="color:var(--red)">cannot execute binary file</code></td>
+              <td>Chạy binary sai kiến trúc (vd: binary x86 trên ARM)</td>
+              <td>Compile lại từ source: <code>g++ -std=c++17 -O2 -pthread -o dtu_server server.cpp</code></td>
+            </tr>
+            <tr>
+              <td>Frontend hiện trắng / lỗi</td>
+              <td>Server chưa chạy hoặc sai port</td>
+              <td>Kiểm tra server đang chạy: <code>curl http://localhost:8080/api/status</code></td>
+            </tr>
+            <tr>
+              <td>macOS: "dtu_server is damaged"</td>
+              <td>Gatekeeper chặn binary lạ</td>
+              <td><code>xattr -cr dtu_server</code> rồi chạy lại. Hoặc compile từ source.</td>
+            </tr>
+            <tr>
+              <td>Charts không hiện</td>
+              <td>Chưa load được Chart.js (cần internet)</td>
+              <td>Kiểm tra kết nối internet lần đầu. Sau đó thường được cache.</td>
+            </tr>
+            <tr>
+              <td><code style="color:var(--red)">Permission denied: run.sh</code></td>
+              <td>Chưa cấp quyền thực thi cho script</td>
+              <td><code>chmod +x run.sh</code> rồi <code>./run.sh</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 
+    <div class="card" style="margin-top:16px">
+      <div class="card-header">🧪 Kiểm tra nhanh server hoạt động</div>
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this,'curl -s http://localhost:8080/api/status | python3 -m json.tool')">Copy</button></div>
+<pre><span class="cm"># Lệnh này nên trả về JSON với thông tin trường:</span>
+<span class="cc">curl -s http://localhost:8080/api/status | python3 -m json.tool</span>
+ 
+<span class="cm"># Kết quả mẫu (đúng):</span>
+<span class="cs">{
+    "uniName": "Hanoi University of Science & Technology",
+    "semester": 1,
+    "day": 0,
+    "totalStudents": 200,
+    "avgGpa": 2.25,
+    ...
+}</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="divider"></div>
+ 
+  <!-- CLASS DIAGRAM -->
+  <div class="section">
+    <h2>🏗️ Kiến trúc hệ thống</h2>
+    <p class="section-sub">Class hierarchy và luồng dữ liệu</p>
+ 
+    <div class="card">
+      <div class="card-body">
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">C++ class hierarchy</span></div>
+<pre><span class="cm">// ── Entity (abstract base) ──────────────────────────────────────────────</span>
+<span class="ck">class</span> <span style="color:var(--amber)">Entity</span>
+ ├─ <span style="color:var(--blue)">Student</span>      <span class="cm">// knowledge(0-100), energy(0-100), money, GPA(0-4.0), stress, FSM</span>
+ └─ <span style="color:var(--blue)">Lecturer</span>     <span class="cm">// mood(4 states), rating(1-5), research progress</span>
+ 
+<span class="ck">class</span> <span style="color:var(--amber)">Building</span> <span class="cm">// capacity, occupancy, open/close</span>
+ ├─ <span style="color:var(--blue)">Classroom</span>   <span class="cm">// roomNum, hasAC, hasProjector</span>
+ ├─ <span style="color:var(--blue)">Cafeteria</span>   <span class="cm">// mealsToday, mealPrice, lunchRush</span>
+ ├─ <span style="color:var(--blue)">Library</span>     <span class="cm">// bookCount, studyRooms</span>
+ └─ <span style="color:var(--blue)">Dormitory</span>   <span class="cm">// rooms, fee, wifi</span>
+ 
+<span class="cm">// ── Engine & Services ───────────────────────────────────────────────────</span>
+<span class="ck">class</span> <span style="color:var(--amber)">University</span>    <span class="cm">// orchestrates 4-tick loop per day</span>
+<span class="ck">class</span> <span style="color:var(--amber)">EventManager</span>  <span class="cm">// 14% random events/day, 8 types, 4 scopes</span>
+<span class="ck">class</span> <span style="color:var(--amber)">Statistics</span>    <span class="cm">// GPA trends, CSV export, semester aggregates</span>
+<span class="ck">class</span> <span style="color:var(--amber)">HttpServer</span>    <span class="cm">// pure POSIX, thread-per-connection, 15 REST endpoints</span>
+ 
+<span class="cm">// ── Simulation Loop (per day) ───────────────────────────────────────────</span>
+Tick <span class="cn">0</span> Morning  → attendClass()   <span class="cm">// knowledge += lecturer.transfer</span>
+Tick <span class="cn">1</span> Midday   → eatMeal()       <span class="cm">// energy +10, money -30K</span>
+Tick <span class="cn">2</span> Afternoon→ work()|social() <span class="cm">// 33% làm thêm, 67% học nhóm</span>
+Tick <span class="cn">3</span> Night    → sleep()         <span class="cm">// energy +25, stress -10, snapshot</span></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+ 
+<footer>
+  <div style="font-size:24px;margin-bottom:8px">🎓</div>
+  <strong>Digital Twin University v3.0</strong><br>
+  C++17 · OOP · Agent-Based Simulation · REST API · Web Dashboard<br>
+  <span style="color:var(--text3)">Đồ án LTHDT — Không cần thư viện ngoài</span>
+</footer>
+ 
+<script>
+function copyCode(btn, text) {
+  if (!text) {
+    // Find nearest pre element
+    const pre = btn.closest('.code-block').querySelector('pre');
+    text = pre.innerText;
+  }
+  navigator.clipboard.writeText(text.trim()).then(() => {
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+ 
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
